@@ -13,8 +13,7 @@ sleep 1
 printf "[!] Termux-security Updating...       \r\e[0m"
 git stash &> /dev/null
 git pull &> /dev/null
-printf "[√] Termux-security Updated Successful." ;NORM
+echo -e "[√] Termux-security Updated Successful." ;NORM
 else
-printf "[!] Theme-Engine Already Updated.                   \r\e[0;1m┃\e[0m"
+echo -e "[!] Termux-security Already Updated.   \e[0m"
 NORM ;fi
-
