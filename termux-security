@@ -1,0 +1,211 @@
+#!/usr/bin/bash
+
+# Author : ABHackerOfficial (github.com/abhackerofficial)
+
+## Only works on Termux !
+## If you stuck on "Authentication Required !". Check:
+
+## Both termux and termux-api are downloaded from playstore.
+## Do not download from other sites
+## like apkmirror.com) or if you have f-droid then download
+## from there. But remember download both from same source.
+
+## If still not working then it could be your device issue.
+## check your android version is 6.0+.
+
+
+HIDE(){ echo -en "\033[?25l";}
+NORM(){ echo -en "\033[?12l\033[?25h";}
+log=$(which login)
+color=$'\e[0;1;38;2;0;230;118m'
+
+## Required Packeges Checking...
+command -v termux-fingerprint > /dev/null 2>&1 || { echo >&2 "I Required Additional Packages but it's not installed, Now Installing..."; apt update ; apt upgrade -y ;apt install termux-api -y; connection="$(ping -c 1 -q www.google.com >&/dev/null; echo $?)"
+if [[ "$connection" != 0 ]]
+then clear
+echo -e "\033[1;91m[\033[1;92m-\033[1;91m] No Internet\033[1;92m connection!"
+   exit
+fi; }
+
+
+reset_setup() {
+sed -i '/HIDE/d' $log
+sed -i '/NORM/d' $log
+sed -i '/HIDE/d' $log
+sed -i '/termux-fingerprint/d' $log
+sed -i '/if [ $? -eq 0 ];then/d' $log
+sed -i '/sleep/d' $log
+sed -i '/mktemp/d' $log
+sed -i '/echo -ne/d' $log
+sed -i '/sleep/d' $log
+sed -i '/else/d' $log
+sed -i '/echo -ne/d' $log
+sed -i '/sleep/d' $log
+sed -i '/echo -ne/d' $log
+}
+
+reset_setup1() {
+sed -i '/HIDE/d' $log
+sed -i '/NORM/d' $log
+sed -i '/HIDE/d' $log
+sed -i '/termux-fingerprint/d' $log
+sed -i '/if [ $? -eq 0 ];then/d' $log
+sed -i '/sleep/d' $log
+sed -i '/clear/d' $log
+sed -i '/echo -ne/d' $log
+sed -i '/sleep/d' $log
+sed -i '/else/d' $log
+sed -i '/echo -ne/d' $log
+sed -i '/sleep/d' $log
+sed -i '/echo -ne/d' $log
+sed -i '/NORM/d' $log
+sed -i '/read password/d' $log
+sed -i '/pwd/d' $log
+sed -i '/NORM/d' $log
+sed -i '/sleep/d' $log
+sed -i '/echo -e/d' $log
+sed -i '/sleep/d' $log
+sed -i '/clear/d' $log
+sed -i '/HIDE/d' $log
+sed -i '/echo -ne/d' $log
+}
+
+setup_fingerprint() {
+grep -q "termux-fingerprint" $log
+if [ $? -eq 0 ]; then
+reset_setup ;fi
+
+grep -q "else" $log
+if [ $? -eq 0 ]; then
+reset_setup ;fi
+
+grep -q "pwd" $log
+if [ $? -eq 0 ]; then
+reset_setup1 ;fi
+
+HIDE ;echo -ne "[!] Authentication Required !\r"
+termux-fingerprint | grep -q "AUTH_RESULT_SUCCESS"
+cd .configuration ; cp login $PREFIX/bin
+
+if [ $? -eq 0 ]; then
+echo -ne "[!] Checking Authentication...\r"
+sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
+sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
+sed -i '3 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
+sed -i '4 a termux-fingerprint -c Exit | grep -q "AUTH_RESULT_SUCCESS"' $log
+sed -i '5 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '6 a sleep 1' $log
+sed -i '7 a echo -ne "[√] Authentication Successful.   \r"' $log
+sed -i '8 a sleep 0.4' $log
+sed -i '9 a mktemp &> /dev/null ;clear ;NORM' $log
+sed -i '10 a else' $log
+sed -i '11 a echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '12 a sleep 1' $log
+sed -i '13 a echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi' $log
+sleep 1
+echo -e "[√] Authentication Successful.  " ;NORM
+else
+echo -ne "[!] Checking Authentication...\r"
+sleep 1.6
+echo -e "[!] Authentication Failed !     " ;NORM
+exit
+fi
+}
+
+setup_fingerprint1() {
+grep -q "termux-fingerprint" $log
+if [ $? -eq 0 ]; then
+reset_setup1 ;fi
+
+grep -q "else" $log
+if [ $? -eq 0 ]; then
+reset_setup1 ;fi
+
+grep -q "mktemp" $log
+if [ $? -eq 0 ]; then
+reset_setup ;fi
+
+HIDE ;echo -ne "[!] Authentication Required !\r"
+termux-fingerprint | grep -q "AUTH_RESULT_SUCCESS"
+cd .configuration ; cp login $PREFIX/bin
+
+if [ $? -eq 0 ]; then
+echo -ne "[!] Checking Authentication...\r"
+sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
+sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
+sed -i '3 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
+sed -i '4 a termux-fingerprint -c Password | grep -q "AUTH_RESULT_SUCCESS"' $log
+sed -i '5 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '6 a sleep 1' $log
+sed -i '7 a echo -ne "[√] Authentication Successful.   \r"' $log
+sed -i '8 a sleep 0.4' $log
+sed -i '9 a clear ;NORM' $log
+sed -i '10 a else' $log
+sed -i '11 a echo -ne "[!] Authentication Failed !     \r"' $log
+sed -i '12 a sleep 0.4' $log
+sed -i '13 a echo -ne "[!] Requesting for Password...  \r" ;sleep 1' $log
+sed -i '14 a NORM;printf "[!] Enter your Authentication Password : "' $log
+sed -i '15 a read password' $log
+NORM ;printf "[!] Add Additional Password : "
+read add ;HIDE
+sed -i '16 a pwd &> /dev/null ;if [[ $password = '"$add"' ]];then' $log
+sed -i '17 a HIDE ;echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '18 a sleep 1' $log
+sed -i '19 a echo -e "[√] Authentication Successful.  "' $log
+sed -i '20 a sleep 0.4' $log
+sed -i '21 a clear ;NORM' $log
+sed -i '22 a else' $log
+sed -i '23 a HIDE ;echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi ;fi' $log
+sleep 0.4
+echo -e "[√] Authentication Successful.  " ;NORM
+else
+echo -ne "[!] Checking Authentication...\r"
+sleep 1.6
+echo -e "[!] Authentication Failed !     " ;NORM
+exit
+fi
+}
+
+set_fingerprint() {
+setup_fingerprint
+}
+
+set_fingerprint1() {
+setup_fingerprint1
+}
+
+reset_fingerprint() {
+cd .configuration ; cp login $PREFIX/bin
+}
+
+banner() { clear
+echo -e "
+╭───────────────────────────────╮
+│                               ├─╮
+│      ╺┳╸┏━╸┏━┓┏┳┓╻ ╻╻ ╻       │ │
+│       ┃ ┣╸ ┣┳┛┃┃┃┃ ┃┏╋┛       │ │
+│       ╹ ┗━╸╹┗╸╹ ╹┗━┛╹ ╹       │ │
+│    ┏━┓┏━╸┏━╸╻ ╻┏━┓╻╺┳╸╻ ╻     │ │
+│    ┗━┓┣╸ ┃  ┃ ┃┣┳┛┃ ┃ ┗┳┛     │ │
+│    ┗━┛┗━╸┗━╸┗━┛╹┗╸╹ ╹  ╹      │ │
+│                               │ │
+╰─┬─────────────────────────────╯ │
+  │ ${color}Termux:API must be Installed.\e[0m │
+  ╰───────────────────────────────╯
+"
+}
+
+banner
+echo -e "[1] Set Fingerprint without Termux-Lock\e[0m"
+echo -e "[2] Set Fingerprint with Termux-Lock\e[0m"
+echo -e "[3] Reset Authentication \e[0m"
+printf "[#] Select Option : \e[0m"
+
+  read -n 2 input
+  case $input in
+  [1/01]* ) echo;set_fingerprint;;
+  [2/02]* ) echo;set_fingerprint1;;
+  [3/03]* ) echo;reset_fingerprint
+            echo "[√] Reset to Default Settings.";;
+        * ) echo;echo -e "[!] Canceled !\n";;
+           esac
