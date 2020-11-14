@@ -17,3 +17,4 @@ git pull ;NORM
 else
 echo -e "[!] Termux-security Already Updated.   \e[0m"
 NORM ;fi
+
