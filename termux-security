@@ -100,9 +100,9 @@ reset_setup1 ;fi
 
 HIDE ;echo -ne "[!] Authentication Required !\r"
 termux-fingerprint | grep -q "AUTH_RESULT_SUCCESS"
-cd .configuration ; cp login $PREFIX/bin
 
 if [ $? -eq 0 ]; then
+cd .configuration ; cp login $PREFIX/bin
 echo -ne "[!] Checking Authentication...\r"
 sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
 sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
@@ -142,9 +142,9 @@ reset_setup ;fi
 
 HIDE ;echo -ne "[!] Authentication Required !\r"
 termux-fingerprint | grep -q "AUTH_RESULT_SUCCESS"
-cd .configuration ; cp login $PREFIX/bin
 
 if [ $? -eq 0 ]; then
+cd .configuration ; cp login $PREFIX/bin
 echo -ne "[!] Checking Authentication...\r"
 sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
 sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
