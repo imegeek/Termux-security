@@ -123,6 +123,7 @@ else
 echo -ne "[!] Checking Authentication...\r"
 sleep 1.6
 echo -e "[!] Authentication Failed !     " ;NORM
+cd .configuration ; cp login $PREFIX/bin
 exit
 fi
 }
@@ -163,6 +164,11 @@ sed -i '14 a NORM;printf "[!] Enter your Authentication Password : "' $log
 sed -i '15 a read password' $log
 NORM ;printf "[!] Add Additional Password : "
 read add ;HIDE
+if [ ${#add} -lt 1 ]; then
+echo "Input was not found !"
+cp login $PREFIX/bin
+NORM; exit 0
+fi
 sed -i '16 a pwd &> /dev/null ;if [[ $password = '"$add"' ]];then' $log
 sed -i '17 a HIDE ;echo -ne "[!] Checking Authentication...\r"' $log
 sed -i '18 a sleep 1' $log
@@ -177,6 +183,7 @@ else
 echo -ne "[!] Checking Authentication...\r"
 sleep 1.6
 echo -e "[!] Authentication Failed !     " ;NORM
+cd .configuration ; cp login $PREFIX/bin
 exit
 fi
 }
