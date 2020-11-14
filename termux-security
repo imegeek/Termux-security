@@ -27,6 +27,21 @@ echo -e "\033[1;91m[\033[1;92m-\033[1;91m] No Internet\033[1;92m connection!"
    exit
 fi; }
 
+# interrupter
+exit_on_signal_SIGINT () {
+    echo -e "\n"
+    NORM
+    exit 0
+}
+
+exit_on_signal_SIGTERM () {
+   echo -e "\n"
+   NORM
+   exit 0
+}
+
+trap exit_on_signal_SIGINT SIGINT ; trap exit_on_signal_SIGTERM SIGTERM
+
 
 reset_setup() {
 sed -i '/HIDE/d' $log
@@ -199,6 +214,7 @@ banner
 echo -e "[1] Set Fingerprint without Termux-Lock\e[0m"
 echo -e "[2] Set Fingerprint with Termux-Lock\e[0m"
 echo -e "[3] Reset Authentication \e[0m"
+echo -e "[4] Check for Update \e[0m"
 printf "[#] Select Option : \e[0m"
 
   read -n 2 input
@@ -207,5 +223,6 @@ printf "[#] Select Option : \e[0m"
   [2/02]* ) echo;set_fingerprint1;;
   [3/03]* ) echo;reset_fingerprint
             echo "[√] Reset to Default Settings.";;
-        * ) echo;echo -e "[!] Canceled !\n";;
+  [4/04]* ) echo; cd .configuration ;bash update;;
+        * ) echo;echo -e "[!] Option Canceled !";;
            esac
