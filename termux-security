@@ -121,7 +121,7 @@ sed -i '6 a termux-fingerprint -c Exit | grep -q "AUTH_RESULT_SUCCESS"' $log
 sed -i '7 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
 sed -i '8 a sleep 1' $log
 sed -i '9 a echo -ne "[√] Authentication Successful.   \r"' $log
-sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success ; cd $HOME' $log
 sed -i '11 a sleep 0.4' $log
 sed -i '12 a mktemp &> /dev/null ;clear ;NORM' $log
 sed -i '13 a else' $log
@@ -169,7 +169,7 @@ sed -i '6 a termux-fingerprint -c Password | grep -q "AUTH_RESULT_SUCCESS"' $log
 sed -i '7 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
 sed -i '8 a sleep 1' $log
 sed -i '9 a echo -ne "[√] Authentication Successful.   \r"' $log
-sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success ; cd $HOME' $log
 sed -i '11 a sleep 0.4' $log
 sed -i '12 a clear ;NORM' $log
 sed -i '13 a else' $log
@@ -189,7 +189,7 @@ sed -i '19 a pwd &> /dev/null ;if [[ $password = '"$add"' ]];then' $log
 sed -i '20 a HIDE ;echo -ne "[!] Checking Authentication...\r"' $log
 sed -i '21 a sleep 1' $log
 sed -i '22 a echo -e "[√] Authentication Successful.  "' $log
-sed -i '23 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '23 a cd /data/data/com.termux/files/usr/tmp ; touch login.success ; cd $HOME' $log
 sed -i '24 a sleep 0.4' $log
 sed -i '25 a clear ;NORM' $log
 sed -i '26 a else' $log
