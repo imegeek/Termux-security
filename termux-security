@@ -46,11 +46,14 @@ trap exit_on_signal_SIGINT SIGINT ; trap exit_on_signal_SIGTERM SIGTERM
 reset_setup() {
 sed -i '/HIDE/d' $log
 sed -i '/NORM/d' $log
+sed -i '/pwd/d' $log
+sed -i '/else/d' $log
 sed -i '/HIDE/d' $log
 sed -i '/termux-fingerprint/d' $log
 sed -i '/if [ $? -eq 0 ];then/d' $log
 sed -i '/sleep/d' $log
 sed -i '/mktemp/d' $log
+sed -i '/cd/d' $log
 sed -i '/echo -ne/d' $log
 sed -i '/sleep/d' $log
 sed -i '/else/d' $log
@@ -62,6 +65,8 @@ sed -i '/echo -ne/d' $log
 reset_setup1() {
 sed -i '/HIDE/d' $log
 sed -i '/NORM/d' $log
+sed -i '/pwd/d' $log
+sed -i '/else/d' $log
 sed -i '/HIDE/d' $log
 sed -i '/termux-fingerprint/d' $log
 sed -i '/if [ $? -eq 0 ];then/d' $log
@@ -70,6 +75,7 @@ sed -i '/clear/d' $log
 sed -i '/echo -ne/d' $log
 sed -i '/sleep/d' $log
 sed -i '/else/d' $log
+sed -i '/cd/d' $log
 sed -i '/echo -ne/d' $log
 sed -i '/sleep/d' $log
 sed -i '/echo -ne/d' $log
@@ -86,6 +92,8 @@ sed -i '/echo -ne/d' $log
 }
 
 setup_fingerprint() {
+if [ -f "/data/data/com.termux/files/usr/tmp/login.success" ];then
+cd /data/data/com.termux/files/usr/tmp ; rm login.success ; cd - &> /dev/null ; fi
 grep -q "termux-fingerprint" $log
 if [ $? -eq 0 ]; then
 reset_setup ;fi
@@ -106,17 +114,20 @@ cd .configuration ; cp login $PREFIX/bin
 echo -ne "[!] Checking Authentication...\r"
 sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
 sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
-sed -i '3 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
-sed -i '4 a termux-fingerprint -c Exit | grep -q "AUTH_RESULT_SUCCESS"' $log
-sed -i '5 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
-sed -i '6 a sleep 1' $log
-sed -i '7 a echo -ne "[√] Authentication Successful.   \r"' $log
-sed -i '8 a sleep 0.4' $log
-sed -i '9 a mktemp &> /dev/null ;clear ;NORM' $log
-sed -i '10 a else' $log
-sed -i '11 a echo -ne "[!] Checking Authentication...\r"' $log
-sed -i '12 a sleep 1' $log
-sed -i '13 a echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi' $log
+sed -i '3 a pwd &> /dev/null ; if [ -f "/data/data/com.termux/files/usr/tmp/login.success" ];then pwd &> /dev/null' $log
+sed -i '4 a else' $log
+sed -i '5 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
+sed -i '6 a termux-fingerprint -c Exit | grep -q "AUTH_RESULT_SUCCESS"' $log
+sed -i '7 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '8 a sleep 1' $log
+sed -i '9 a echo -ne "[√] Authentication Successful.   \r"' $log
+sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '11 a sleep 0.4' $log
+sed -i '12 a mktemp &> /dev/null ;clear ;NORM' $log
+sed -i '13 a else' $log
+sed -i '14 a echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '15 a sleep 1' $log
+sed -i '16 a echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi ;fi' $log
 sleep 1
 echo -e "[√] Authentication Successful.  " ;NORM
 else
@@ -129,6 +140,8 @@ fi
 }
 
 setup_fingerprint1() {
+if [ -f "/data/data/com.termux/files/usr/tmp/login.success" ];then
+cd /data/data/com.termux/files/usr/tmp ; rm login.success; cd - &> /dev/null ; fi
 grep -q "termux-fingerprint" $log
 if [ $? -eq 0 ]; then
 reset_setup1 ;fi
@@ -149,19 +162,22 @@ cd .configuration ; cp login $PREFIX/bin
 echo -ne "[!] Checking Authentication...\r"
 sed -i '1 a HIDE(){ echo -en "\\033[?25l";}' $log
 sed -i '2 a NORM(){ echo -en "\\033[?12l\\033[?25h";}' $log
-sed -i '3 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
-sed -i '4 a termux-fingerprint -c Password | grep -q "AUTH_RESULT_SUCCESS"' $log
-sed -i '5 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
-sed -i '6 a sleep 1' $log
-sed -i '7 a echo -ne "[√] Authentication Successful.   \r"' $log
-sed -i '8 a sleep 0.4' $log
-sed -i '9 a clear ;NORM' $log
-sed -i '10 a else' $log
-sed -i '11 a echo -ne "[!] Authentication Failed !     \r"' $log
-sed -i '12 a sleep 0.4' $log
-sed -i '13 a echo -ne "[!] Requesting for Password...  \r" ;sleep 1' $log
-sed -i '14 a NORM;printf "[!] Enter your Authentication Password : "' $log
-sed -i '15 a read password' $log
+sed -i '3 a pwd &> /dev/null ; if [ -f "/data/data/com.termux/files/usr/tmp/login.success" ];then pwd &> /dev/null' $log
+sed -i '4 a else' $log
+sed -i '5 a HIDE; echo -ne "[!] Authentication Required !\r"' $log
+sed -i '6 a termux-fingerprint -c Password | grep -q "AUTH_RESULT_SUCCESS"' $log
+sed -i '7 a if [ $? -eq 0 ];then echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '8 a sleep 1' $log
+sed -i '9 a echo -ne "[√] Authentication Successful.   \r"' $log
+sed -i '10 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '11 a sleep 0.4' $log
+sed -i '12 a clear ;NORM' $log
+sed -i '13 a else' $log
+sed -i '14 a echo -ne "[!] Authentication Failed !     \r"' $log
+sed -i '15 a sleep 0.4' $log
+sed -i '16 a echo -ne "[!] Requesting for Password...  \r" ;sleep 1' $log
+sed -i '17 a NORM;printf "[!] Enter your Authentication Password : "' $log
+sed -i '18 a read password' $log
 NORM ;printf "[!] Add Additional Password : "
 read add ;HIDE
 if [ ${#add} -lt 1 ]; then
@@ -169,14 +185,15 @@ echo "Input was not found !"
 cp login $PREFIX/bin
 NORM; exit 0
 fi
-sed -i '16 a pwd &> /dev/null ;if [[ $password = '"$add"' ]];then' $log
-sed -i '17 a HIDE ;echo -ne "[!] Checking Authentication...\r"' $log
-sed -i '18 a sleep 1' $log
-sed -i '19 a echo -e "[√] Authentication Successful.  "' $log
-sed -i '20 a sleep 0.4' $log
-sed -i '21 a clear ;NORM' $log
-sed -i '22 a else' $log
-sed -i '23 a HIDE ;echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi ;fi' $log
+sed -i '19 a pwd &> /dev/null ;if [[ $password = '"$add"' ]];then' $log
+sed -i '20 a HIDE ;echo -ne "[!] Checking Authentication...\r"' $log
+sed -i '21 a sleep 1' $log
+sed -i '22 a echo -e "[√] Authentication Successful.  "' $log
+sed -i '23 a cd /data/data/com.termux/files/usr/tmp ; touch login.success' $log
+sed -i '24 a sleep 0.4' $log
+sed -i '25 a clear ;NORM' $log
+sed -i '26 a else' $log
+sed -i '27 a HIDE ;echo -ne "[!] Authentication Failed !     \r" ;sleep 0.4 ;exit ;fi ;fi ;fi' $log
 sleep 0.4
 echo -e "[√] Authentication Successful.  " ;NORM
 else
